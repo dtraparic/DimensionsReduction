@@ -40,21 +40,49 @@ print('nombre de labels : ', mnist.target.shape)
 # print(max(mnist.data[1]))
 # print(mnist.data)
 
-train = mnist.data[1:end-100]
-test = mnist.data[100:end]
-train_label = mnist.target[1:end-100]
-test_label = mnist.data[100:end]
+train = mnist.data[1:-100]
+test = mnist.data[100:]
+train_label = mnist.target[1:-100]
+test_label = mnist.data[100:]
 
-for i in range(0, 1)
+print(mnist.target)
 
-    mask_vector_i = (train_label == i) # = [0 1 0 0 1...], une matrice d'indices pour selectionner toutes les données d'un label particulier
-    train_i = train(mask_vector_i,:) # data d'une classe
+nb_class = 10;
+all_means = []
+Sw = [] # covariance intra classe
+Si = [] # covariance inter classe
+
+for i in range(0, 9):
+
+    mask_vector_i = (train_label == str(i)) # = [0 1 0 0 1...], une matrice d'indices pour selectionner toutes les données d'un label particulier
+    # print(mask_vector_i[1:10])
+    print(train.shape)
+    print(train[mask_vector_i, :].shape)
+
+    train_i = train[mask_vector_i, :] # data d'une classe
+    # print(train_i[1:10])
     print(train_i.shape)
+    n_i = train_i.shape[1]
+    part_i = n_i / nb_class
+    mean_i = np.mean(train_i)
 
+    Si_i = np.cov(train_i, train_i); # Autocovariance de chaque classe
 
+    Sw += Si_i * part_i
+
+    print(Sw.shape)
+    print(Si_i.shape)
+
+    Sb += part_i * (mean_i - np.mean(train)) * np.transpose(mean_i - np.mean(train)) # ici on pourrait passer par la cov si on a un tableau des moyennes de classes
+
+    print(n_i, mean_i)
+
+    all_means.append(mean_i)
+    all_Sw.append(Sw_i)
+    all_Si.append(Si_i)
 
 cov = np.cov(mnist.data[1])
-dis
+
 
 
 
