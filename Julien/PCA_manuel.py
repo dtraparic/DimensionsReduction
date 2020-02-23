@@ -60,7 +60,7 @@ eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
 # Sort the (eigenvalue, eigenvector) tuples from high to low
 print("aazdqzqsddqsds")
 #print(eig_pairs[1])
-eig_vals.sort()
+
 sorted(eig_pairs, key=lambda x:x[0])
 
 #print('Eigenvalues in descending order:')
@@ -94,6 +94,8 @@ for i in eig_pairs:
 l1 = np.reshape(l, (compteur, 784)).T
 
 y = mnist.data.dot(l1)
+
+
 #
 ## On print pour bien tout visualiser, et on s'occupe aussi de séparer les données d'entrainement des données de test, puis on fait la même chose en fonction des libellés.
 #
