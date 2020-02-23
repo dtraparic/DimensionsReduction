@@ -143,7 +143,7 @@ Y_t = np.transpose(G).dot(test);
 # In[7]:
 
 
-def classifyNN(Y_t, Y, test_label, train_label)
+def classifyNN(Y_t, Y, test_label, train_label):
     train_size = Y.shape[1]
     test_size = Y_t.shape[1]
     counter = np.zeros(test_size)
