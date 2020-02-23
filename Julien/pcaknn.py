@@ -15,6 +15,7 @@ import numpy as np
 import imutils
 import cv2
 import sklearn
+from sklearn import manifold, decomposition, discriminant_analysis
  
 # handle older versions of sklearn
 if int((sklearn.__version__).split(".")[1]) < 18:
@@ -24,9 +25,25 @@ if int((sklearn.__version__).split(".")[1]) < 18:
 else:
 	from sklearn.model_selection import train_test_split
  
-# load the MNIST digits dataset
+    
 mnist = datasets.load_digits()
+
+(trainData1, testData1, trainLabels1, testLabels1) = train_test_split(np.array(mnist.data),
+	mnist.target, test_size=0.25, random_state=42)
+
+X = mnist.data
+y = mnist.target
+n_samples, n_features = X.shape
+
+X_pca = decomposition.PCA(n_components=3).fit_transform(X)    
+   
+#X_lda = discriminant_analysis.LinearDiscriminantAnalysis(n_components=3).fit_transform(X, y)
  
+mnist.data = X_pca
+
+
+
+
 # take the MNIST data and construct the training and testing split, using 75% of the
 # data for training and 25% for testing
 (trainData, testData, trainLabels, testLabels) = train_test_split(np.array(mnist.data),
@@ -62,6 +79,9 @@ print("k=%d achieved highest accuracy of %.2f%% on validation data" % (kVals[i],
 	accuracies[i] * 100))
 
 
+
+
+
 # re-train our classifier using the best k value and predict the labels of the
 # test data
 model = KNeighborsClassifier(n_neighbors=kVals[i])
@@ -76,18 +96,17 @@ print(classification_report(testLabels, predictions))
 
 	
 # loop over a few random digits
-for i in list(map(int, np.random.randint(0, high=len(testLabels), size=(1,)))):
+for i in list(map(int, np.random.randint(0, high=len(testLabels), size=(10,)))):
 	# grab the image and classify it
-	image = testData[i]
-	prediction = model.predict(image.reshape(1, -1))[0]
- 
+    image = testData[i]
+    image1 = testData1[i]
+    prediction = model.predict(image.reshape(1, -1))[0]
 	# convert the image for a 64-dim array to an 8 x 8 image compatible with OpenCV,
 	# then resize it to 32 x 32 pixels so we can see it better
-	image = image.reshape((8, 8)).astype("uint8")
-	image = exposure.rescale_intensity(image, out_range=(0, 255))
-	image = imutils.resize(image, width=32, inter=cv2.INTER_CUBIC)
- 
+    image1 = image1.reshape((8, 8)).astype("uint8")
+    image1 = exposure.rescale_intensity(image1, out_range=(0, 255))
+    image1 = imutils.resize(image1, width=32, inter=cv2.INTER_CUBIC)
 	# show the prediction
-	print("I think that digit is: {}".format(prediction))
-	cv2.imshow("Image", image)
-	cv2.waitKey(0)
+    print("I think that digit is: {}".format(prediction))
+    cv2.imshow("Image", image1)
+    cv2.waitKey(0)

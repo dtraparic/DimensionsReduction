@@ -19,6 +19,8 @@ n_samples, n_features = X.shape
 
 
 
+
+
 np.set_printoptions(threshold=np.inf) # option pour les print de valeurs
 
 
